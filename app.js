@@ -3,14 +3,15 @@
 var express = require("express"),
     http = require("http"),
     path = require("path"),
-	redisClient = require("redis").createClient(),
+    redisClient = require("redis").createClient(),
     app = express(),
-	twitterWorker = require("./twitter.js"),
-	trackWords = ["happy","ecstatic","joy","glad","fortunate","merry","cheerful","sad","sorrowful","mournful","gloomy","woeful","upset","depressed"];
+    twitterWorker = require("./twitter.js"),
+    trackWords = ["happy", "ecstatic", "joy", "glad", "fortunate", "merry", "cheerful", "sad", "sorrowful", "mournful", "gloomy", "woeful", "upset", "depressed"];
 
 // This is our basic configuration                                                                                                                     
 app.configure(function () {
-    // Define our static file directory, it will be 'public'                                                                                           
+    // Define our static file directory, it will be 'public' 
+    "use strict";
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -18,12 +19,13 @@ twitterWorker(trackWords);
 
 // Create the http server and get it to                                                                                                                
 // listen on the specified port 3000                                                                                                                   
-http.createServer(app).listen(3000, function(){
+http.createServer(app).listen(3000, function() {
+    "use strict";
     console.log("Express server listening on port 3000");
 });
 
 app.get("/", function (req, res) {
-    //send "Hello World" to the client as html
+    "use strict";
     res.send("Hello World!");
 });
 
