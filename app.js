@@ -5,7 +5,7 @@ var express = require("express"),
     path = require("path"),
 	redisClient = require("redis").createClient(),
     app = express(),
-	twitterWorker = require("./twitter.js");
+	twitterWorker = require("./twitter.js"),
 	trackWords = ["happy","ecstatic","joy","glad","fortunate","merry","cheerful","sad","sorrowful","mournful","gloomy","woeful","upset","depressed"];
 
 // This is our basic configuration                                                                                                                     
