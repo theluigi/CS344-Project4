@@ -3,6 +3,7 @@
 var express = require("express"),
     http = require("http"),
     path = require("path"),
+	redisClient = require("redis").createClient();
     app = express();
 
 // This is our basic configuration                                                                                                                     
@@ -20,4 +21,20 @@ http.createServer(app).listen(3000, function(){
 app.get("/", function (req, res) {
     //send "Hello World" to the client as html
     res.send("Hello World!");
+});
+
+});
+app.get("/counts.json", function	(req, res) {
+    redisClient.get("awesome", function	(error, awesomeCount) {
+	if (error !== null) {
+            // handle error here                                                                                                                       
+            console.log("ERROR: " + error);
+        } else {
+            var jsonObject = {
+		"awesome":awesomeCount
+            };
+            // use res.json to return JSON objects instead of strings
+            res.json(jsonObject);
+        }
+    });
 });
