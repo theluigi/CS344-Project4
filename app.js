@@ -3,14 +3,18 @@
 var express = require("express"),
     http = require("http"),
     path = require("path"),
-	redisClient = require("redis").createClient();
-    app = express();
+	redisClient = require("redis").createClient(),
+    app = express(),
+	twitterWorker = require("./twitter.js");
+	trackWords = ["happy","ecstatic","joy","glad","fortunate","merry","cheerful","sad","sorrowful","mournful","gloomy","woeful","upset","depressed"];
 
 // This is our basic configuration                                                                                                                     
 app.configure(function () {
     // Define our static file directory, it will be 'public'                                                                                           
     app.use(express.static(path.join(__dirname, 'public')));
 });
+
+twitterWorker(trackWords);
 
 // Create the http server and get it to                                                                                                                
 // listen on the specified port 3000                                                                                                                   
@@ -25,16 +29,18 @@ app.get("/", function (req, res) {
 
 });
 app.get("/counts.json", function	(req, res) {
-    redisClient.get("awesome", function	(error, awesomeCount) {
+    redisClient.mget(trackWords, function	(error, results) {
+	var result = []; 
 	if (error !== null) {
             // handle error here                                                                                                                       
             console.log("ERROR: " + error);
         } else {
-            var jsonObject = {
-		"awesome":awesomeCount
-            };
-            // use res.json to return JSON objects instead of strings
-            res.json(jsonObject);
-        }
+            for (var i=0; i<trackWords.length; i++) {
+				result.push({
+					"key":trackWords[i],
+					"value":results[i];
+					});
+				}
+        }res.json(result); 
     });
 });
